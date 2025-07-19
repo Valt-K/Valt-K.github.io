@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кооператив</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0 auto;
+            background: #0a0a0a;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 15px 20px;
+            border-bottom: 2px solid #00ff41;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff41;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #00ff41;
+            object-fit: cover;
+            cursor: pointer;
+            background: #333;
+        }
+
+        .login-screen, .registration-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .login-form, .registration-form {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #00ff41;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+
+        .form-title {
+            color: #00ff41;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00ff41;
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #00ff41 0%, #00cc33 100%);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            margin-top: 10px;
+        }
+
+        .contacts-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #1a1a1a;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+        }
+
+        .contact-item:hover {
+            background: #2d2d2d;
+            border-color: #00ff41;
+        }
+
+        .contact-item.online {
+            border-left: 4px solid #00ff41;
+        }
+
+        .contact-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid #00ff41;
+            object-fit: cover;
+            background: #333;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .contact-status {
+            color: #888;
+            font-size: 12px;
+        }
+
+        .chat-screen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .chat-header {
+            background: #1a1a1a;
+            padding: 15px 20px;
+            border-bottom: 1px solid #00ff41;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #00ff41;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message.sent {
+            background: linear-gradient(135deg, #00ff41 0%, #00cc33 100%);
+            color: #000;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+        }
+
+        .message.received {
+            background: #2d2d2d;
+            color: #ffffff;
+            align-self: flex-start;
+            border: 1px solid #444;
+            border-bottom-left-radius: 6px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .chat-input-container {
+            background: #1a1a1a;
+            padding: 15px;
+            border-top: 1px solid #333;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 20px;
+            color: #ffffff;
+            font-size: 16px;
+            resize: none;
+            max-height: 100px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #00ff41;
+        }
+
+        .send-btn, .emoji-btn {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover, .emoji-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
+        }
+
+        .emoji-picker {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background: #1a1a1a;
+            border: 2px solid #00ff41;
+            border-radius: 12px;
+            padding: 15px;
+            display: none;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .emoji {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .emoji:hover {
+            background: #2d2d2d;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: none;
+            border: none;
+            color: #00ff41;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .user-count {
+            color: #888;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+            }
+           
+            .header {
+                padding: 10px 15px;
+            }
+           
+            .logo {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Экран входа -->
+        <div id="loginScreen" class="login-screen">
+            <div class="login-form">
+                <h2 class="form-title">КООПЕРАТИВ</h2>
+                <div class="form-group">
+                    <input type="text" id="loginUsername" class="form-input" placeholder="Имя пользователя" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Пароль" maxlength="50">
+                </div>
+                <button onclick="login()" class="btn">ВОЙТИ</button>
+                <button onclick="showRegistration()" class="btn btn-secondary">РЕГИСТРАЦИЯ</button>
+            </div>
+        </div>
+
+        <!-- Экран регистрации -->
+        <div id="registrationScreen" class="registration-screen hidden">
+            <div class="registration-form">
+                <h2 class="form-title">РЕГИСТРАЦИЯ</h2>
+                <div class="form-group">
+                    <input type="text" id="regUsername" class="form-input" placeholder="Имя пользователя" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="regPassword" class="form-input" placeholder="Пароль" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <input type="file" id="avatarInput" class="file-input" accept="image/png,image/jpeg">
+                    <button onclick="document.getElementById('avatarInput').click()" class="btn btn-secondary">ВЫБРАТЬ ФОТО</button>
+                </div>
+                <button onclick="register()" class="btn">СОЗДАТЬ АККАУНТ</button>
+                <button onclick="showLogin()" class="btn btn-secondary">НАЗАД</button>
+            </div>
+        </div>
+
+        <!-- Главный экран -->
+        <div id="mainScreen" class="hidden">
+            <div class="header">
+                <div class="logo">КООПЕРАТИВ</div>
+                <div class="user-info">
+                    <div class="user-count" id="userCount">4/4</div>
+                    <img id="userAvatar" class="avatar" onclick="changeAvatar()">
+                </div>
+            </div>
+
+            <div class="contacts-list" id="contactsList">
+                <!-- Контакты будут добавлены динамически -->
+            </div>
+        </div>
+
+        <!-- Экран чата -->
+        <div id="chatScreen" class="chat-screen">
+            <div class="chat-header">
+                <button class="back-btn" onclick="showContacts()">←</button>
+                <img id="chatAvatar" class="contact-avatar">
+                <div>
+                    <div class="contact-name" id="chatContactName"></div>
+                    <div class="contact-status">в сети</div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Сообщения будут добавлены динамически -->
+            </div>
+
+            <div class="chat-input-container">
+                <button class="emoji-btn" onclick="toggleEmojiPicker()">😊</button>
+                <textarea id="chatInput" class="chat-input" placeholder="Введите сообщение..." rows="1"></textarea>
+                <button class="send-btn" onclick="sendMessage()">→</button>
+            </div>
+
+            <div class="emoji-picker" id="emojiPicker">
+                <!-- Эмодзи будут добавлены динамически -->
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="avatarChangeInput" class="file-input" accept="image/png,image/jpeg">
+
+    <script>
+        // Глобальные переменные
+        let currentUser = null;
+        let currentChat = null;
+        let users = JSON.parse(localStorage.getItem('cooperativeUsers') || '{}');
+        let messages = JSON.parse(localStorage.getItem('cooperativeMessages') || '{}');
+
+        // Эмодзи для выбора
+        const emojis = ['😊', '😂', '😍', '🤔', '👍', '👎', '❤️', '😢', '😡', '😎', '🔥', '💯', '👌', '🙌', '🤝', '💪', '🎉', '🌟', '⭐', '✨', '💝', '🎯', '🚀', '💡', '📱', '💻'];
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEmojis();
+            updateUserCount();
+            checkAuthentication();
+
+            // Автоматическое изменение размера textarea
+            document.getElementById('chatInput').addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            });
+
+            // Отправка сообщения по Enter
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Обработка смены аватара
+            document.getElementById('avatarChangeInput').addEventListener('change', function(e) {
+                if (e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        if (currentUser) {
+                            users[currentUser].avatar = e.target.result;
+                            saveData();
+                            updateUserAvatar();
+                            updateContactsList();
+                        }
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+
+            // Симуляция реального времени
+            setInterval(simulateRealTimeMessages, 3000);
+        });
+
+        function initializeEmojis() {
+            const emojiPicker = document.getElementById('emojiPicker');
+            emojis.forEach(emoji => {
+                const emojiElement = document.createElement('div');
+                emojiElement.className = 'emoji';
+                emojiElement.textContent = emoji;
+                emojiElement.onclick = () => insertEmoji(emoji);
+                emojiPicker.appendChild(emojiElement);
+            });
+        }
+
+        function showLogin() {
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('registrationScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('chatScreen').style.display = 'none';
+        }
+
+        function showRegistration() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('registrationScreen').classList.remove('hidden');
+        }
+
+        function showMain() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('registrationScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+            document.getElementById('chatScreen').style.display = 'none';
+            updateContactsList();
+            updateUserAvatar();
+        }
+
+        function showChat(contactName) {
+            currentChat = contactName;
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('chatScreen').style.display = 'flex';
+           
+            const contact = users[contactName];
+            document.getElementById('chatContactName').textContent = contactName;
+            document.getElementById('chatAvatar').src = contact.avatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="22.5" fill="%23333"/><text x="22.5" y="28" text-anchor="middle" fill="%2300ff41" font-size="20">👤</text></svg>';
+           
+            loadChatMessages();
+        }
+
+        function showContacts() {
+            document.getElementById('chatScreen').style.display = 'none';
+            document.getElementById('mainScreen').classList.remove('hidden');
+            currentChat = null;
+        }
+
+        function checkAuthentication() {
+            const savedUser = localStorage.getItem('cooperativeCurrentUser');
+            if (savedUser && users[savedUser]) {
+                currentUser = savedUser;
+                showMain();
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const avatarFile = document.getElementById('avatarInput').files[0];
+
+            if (!username || !password) {
+                alert('Заполните все поля!');
+                return;
+            }
+
+            if (users[username]) {
+                alert('Пользователь с таким именем уже существует!');
+                return;
+            }
+
+            if (Object.keys(users).length >= 4) {
+                alert('Максимальное количество пользователей: 4');
+                return;
+            }
+
+            const user = {
+                username: username,
+                password: password,
+                avatar: null,
+                online: true,
+                lastSeen: new Date().toISOString()
+            };
+
+            if (avatarFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    user.avatar = e.target.result;
+                    users[username] = user;
+                    saveData();
+                    currentUser = username;
+                    localStorage.setItem('cooperativeCurrentUser', currentUser);
+                    updateUserCount();
+                    showMain();
+                };
+                reader.readAsDataURL(avatarFile);
+            } else {
+                users[username] = user;
+                saveData();
+                currentUser = username;
+                localStorage.setItem('cooperativeCurrentUser', currentUser);
+                updateUserCount();
+                showMain();
+            }
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                alert('Введите имя пользователя и пароль!');
+                return;
+            }
+
+            if (!users[username] || users[username].password !== password) {
+                alert('Неверное имя пользователя или пароль!');
+                return;
+            }
+
+            currentUser = username;
+            users[currentUser].online = true;
+            users[currentUser].lastSeen = new Date().toISOString();
+            localStorage.setItem('cooperativeCurrentUser', currentUser);
+            saveData();
+            showMain();
+        }
+
+        function updateContactsList() {
+            const contactsList = document.getElementById('contactsList');
+            contactsList.innerHTML = '';
+
+            Object.keys(users).forEach(username => {
+                if (username !== currentUser) {
+                    const contact = users[username];
+                    const contactElement = document.createElement('div');
+                    contactElement.className = `contact-item ${contact.online ? 'online' : ''}`;
+                    contactElement.onclick = () => showChat(username);
+
+                    const avatarSrc = contact.avatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45"><circle cx="22.5" cy="22.5" r="22.5" fill="%23333"/><text x="22.5" y="28" text-anchor="middle" fill="%2300ff41" font-size="20">👤</text></svg>';
+
+                    contactElement.innerHTML = `
+                        <img class="contact-avatar" src="${avatarSrc}">
+                        <div class="contact-info">
+                            <div class="contact-name">${username}</div>
+                            <div class="contact-status">${contact.online ? 'в сети' : 'был в сети ' + formatTime(contact.lastSeen)}</div>
+                        </div>
+                    `;
+
+                    contactsList.appendChild(contactElement);
+                }
+            });
+        }
+
+        function updateUserAvatar() {
+            const userAvatar = document.getElementById('userAvatar');
+            if (currentUser && users[currentUser]) {
+                const avatarSrc = users[currentUser].avatar || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35"><circle cx="17.5" cy="17.5" r="17.5" fill="%23333"/><text x="17.5" y="22" text-anchor="middle" fill="%2300ff41" font-size="16">👤</text></svg>';
+                userAvatar.src = avatarSrc;
+            }
+        }
+
+        function updateUserCount() {
+            document.getElementById('userCount').textContent = `${Object.keys(users).length}/4`;
+        }
+
+        function changeAvatar() {
+            document.getElementById('avatarChangeInput').click();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messageText = input.value.trim();
+
+            if (!messageText || !currentChat) return;
+
+            const chatId = getChatId(currentUser, currentChat);
+            if (!messages[chatId]) {
+                messages[chatId] = [];
+            }
+
+            const message = {
+                id: Date.now(),
+                sender: currentUser,
+                text: messageText,
+                timestamp: new Date().toISOString()
+            };
+
+            messages[chatId].push(message);
+            saveData();
+            input.value = '';
+            input.style.height = 'auto';
+            loadChatMessages();
+        }
+
+        function loadChatMessages() {
+            const chatMessages = document.getElementById('chatMessages');
+            const chatId = getChatId(currentUser, currentChat);
+            const chatHistory = messages[chatId] || [];
+
+            chatMessages.innerHTML = '';
+
+            chatHistory.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${message.sender === currentUser ? 'sent' : 'received'}`;
+               
+                messageElement.innerHTML = `
+                    <span>${message.text}</span>
+                    <span class="message-time">${formatTime(message.timestamp)}</span>
+                `;
+
+                chatMessages.appendChild(messageElement);
+            });
+
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function getChatId(user1, user2) {
+            return [user1, user2].sort().join('_');
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffMins < 1) return 'только что';
+            if (diffMins < 60) return `${diffMins} мин назад`;
+            if (diffHours < 24) return `${diffHours} ч назад`;
+            if (diffDays < 7) return `${diffDays} д назад`;
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        function toggleEmojiPicker() {
+            const picker = document.getElementById('emojiPicker');
+            picker.style.display = picker.style.display === 'grid' ? 'none' : 'grid';
+        }
+
+        function insertEmoji(emoji) {
+            const input = document.getElementById('chatInput');
+            input.value += emoji;
+            input.focus();
+            toggleEmojiPicker();
+        }
+
+        function simulateRealTimeMessages() {
+            // Симуляция получения сообщений в реальном времени
+            if (currentChat && Math.random() < 0.1) {
+                // Очень редко добавляем тестовое сообщение для демонстрации
+                const testMessages = ['👍', '😊', 'Как дела?', 'Привет!'];
+                const randomMessage = testMessages[Math.floor(Math.random() * testMessages.length)];
+               
+                // Не отправляем реальные сообщения, это только для демонстрации интерфейса
+                // В реальной версии здесь была бы проверка новых сообщений через WebSocket или API
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('cooperativeUsers', JSON.stringify(users));
+            localStorage.setItem('cooperativeMessages', JSON.stringify(messages));
+        }
+
+        // Закрытие эмодзи-пикера при клике вне его
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.emoji-btn') && !e.target.closest('.emoji-picker')) {
+                document.getElementById('emojiPicker').style.display = 'none';
+            }
+        });
+
+        // Обновление статуса "в сети" при активности
+        document.addEventListener('visibilitychange', function() {
+            if (currentUser) {
+                users[currentUser].online = !document.hidden;
+                users[currentUser].lastSeen = new Date().toISOString();
+                saveData();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
